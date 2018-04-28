@@ -8,4 +8,4 @@ var studentSchema = new  Schema({
 	cgpa: Number
 });
 
-module.exports = restful.model('tb1student', studentSchema);
+module.exports = mongoose.model('tb1student', studentSchema);
