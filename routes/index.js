@@ -3,14 +3,8 @@ const route = require('express').Router();
 
 route.get('/students',(req, res) => {
 	Student.find({}, function(err, students) {
-    // var userMap = {};
-
-    // students.forEach(function(user) {
-    //   userMap[user._id] = user;
-    // });
-
-    res.send(students);  
-  });
+    	res.send(students);  
+  	});
 });
 
 route.post('/addStudent',(req, res) => {
@@ -32,6 +26,24 @@ route.delete('/removeStudent/:id',(req, res) => {
 		if(err) return err;
 		res.send();
 	});
+})
+
+route.put('/editStudent/:id', (req, res) => {
+	Student.findOneAndUpdate({
+		_id: req.params.id
+	}, {
+		$set: {
+			name : req.body.name,
+	    	department : req.body.department,
+	    	rollNo : req.body.rollNo,
+	    	cgpa : req.body.cgpa
+		}
+	}, {
+		new: true
+	}, function(err, student) {
+		if(err) return err;
+		res.send(student);
+	})
 })
 
 module.exports = route;
