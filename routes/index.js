@@ -54,8 +54,8 @@ route.get('/companies',(req, res) => {
 });
 
 route.get('/companies/:id',(req, res) => {
-	Company.find({_id: req.params.id}, function(err, companies) {
-    	res.send(companies);  
+	Company.find({_id: req.params.id}, function(err, company) {
+    	res.send(company);  
   	});
 });
 
@@ -65,6 +65,7 @@ route.post('/registerCompany',(req, res) => {
     company.name = req.body.name;
     company.profile = req.body.profile;
     company.openings = req.body.openings;
+    company.students = [];
 
     company.save(function(err, company){
         if(err) return err;
@@ -77,6 +78,36 @@ route.delete('/unregisterCompany/:id',(req, res) => {
 		if(err) return err;
 		res.send();
 	});
+})
+
+route.put('/registerStudent/:id', (req, res) => {
+	Company.findOneAndUpdate({
+		_id: req.body.companyId
+	}, {
+		$push: {
+	    	students : req.params.id
+		}
+	}, {
+		new: true
+	}, function(err, company) {
+		if(err) return err;
+		res.send(company);
+	})
+})
+
+route.put('/unregisterStudent/:id', (req, res) => {
+	Company.findOneAndUpdate({
+		_id: req.body.companyId
+	}, {
+		$pull: {
+	    	students : req.params.id
+		}
+	}, {
+		new: true
+	}, function(err, company) {
+		if(err) return err;
+		res.send(company);
+	})
 })
 
 module.exports = route;
