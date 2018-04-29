@@ -1,4 +1,5 @@
 const Student = require('../models/student.js');
+const Company = require('../models/company.js');
 const route = require('express').Router();
 
 route.get('/students',(req, res) => {
@@ -44,6 +45,38 @@ route.put('/editStudent/:id', (req, res) => {
 		if(err) return err;
 		res.send(student);
 	})
+})
+
+route.get('/companies',(req, res) => {
+	Company.find({}, function(err, companies) {
+    	res.send(companies);  
+  	});
+});
+
+route.get('/companies/:id',(req, res) => {
+	Company.find({_id: req.params.id}, function(err, companies) {
+    	res.send(companies);  
+  	});
+});
+
+route.post('/registerCompany',(req, res) => {
+	var company = new Company();
+
+    company.name = req.body.name;
+    company.profile = req.body.profile;
+    company.openings = req.body.openings;
+
+    company.save(function(err, company){
+        if(err) return err;
+        res.send(company); 
+    });
+});
+
+route.delete('/unregisterCompany/:id',(req, res) => {
+	Company.remove({_id: req.params.id},function(err) {
+		if(err) return err;
+		res.send();
+	});
 })
 
 module.exports = route;

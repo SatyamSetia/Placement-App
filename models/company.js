@@ -2,7 +2,9 @@ var mongoose = require("mongoose");
 var { Schema } = mongoose;
 
 var companySchema = new  Schema({
-	name: String
+	name: String,
+	profile: String,
+	openings: Number
 });
 
-module.exports = restful.model('tb1company', companySchema);
+module.exports = mongoose.model('tb1company', companySchema);
