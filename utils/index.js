@@ -1,6 +1,7 @@
 const Company = require('../models/company.js');
 const logger = require('../logger');
 
+/*-- middleware for checking if student is already registered in requested company --*/
 function ifAlreadyRegistered() {
 	return function(req,res,next) {
 		Company.find({_id: req.body.companyId}, function(err, company){

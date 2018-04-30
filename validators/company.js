@@ -1,6 +1,7 @@
 const validator = require('validator');
 const logger = require('../logger');
 
+/*-- function for validating company details --*/
 function validateCompany() {
 	return function(req, res, next) {
 		if(validator.isEmpty(req.body.name)) {

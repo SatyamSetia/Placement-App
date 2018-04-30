@@ -2,6 +2,7 @@ const winston = require('winston');
 
 const timestampFormat = () => (new Date()).toLocaleTimeString();
 
+/*-- setting log format --*/
 const logger = new winston.Logger({
 	transports: [
 		new winston.transports.Console({
@@ -12,7 +13,3 @@ const logger = new winston.Logger({
 });
 
 module.exports = logger;
-// logger.level = 'debug';
-
-// logger.info("hello winston");
-// logger.debug("debugging info");

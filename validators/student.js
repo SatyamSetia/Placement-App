@@ -1,6 +1,7 @@
 const validator = require('validator');
 const logger = require('../logger');
 
+/*-- function for validating student details --*/
 function validateStudent() {
 	return function(req,res,next) {
 		if(validator.isEmpty(req.body.name)){

@@ -6,6 +6,7 @@ const validateStudent = require('../validators/student');
 const validateCompany = require('../validators/company');
 const ifAlreadyRegistered = require('../utils/index');
 
+/*-- route for getting all students from database --*/
 route.get('/students',(req, res) => {
 	Student.find({}, function(err, students) {
 		if(err) {
@@ -17,6 +18,7 @@ route.get('/students',(req, res) => {
   	});
 });
 
+/*-- route for adding a new student to database --*/
 route.post('/addStudent', validateStudent(), (req, res) => {
 	var student = new Student();
 
@@ -32,6 +34,7 @@ route.post('/addStudent', validateStudent(), (req, res) => {
     });
 });
 
+/*-- route for removing a student from database --*/
 route.delete('/removeStudent/:id',(req, res) => {
 	Student.remove({_id: req.params.id},function(err) {
 		if(err) return err;
@@ -40,6 +43,7 @@ route.delete('/removeStudent/:id',(req, res) => {
 	});
 })
 
+/*-- route for editing a student in database --*/
 route.put('/editStudent/:id', validateStudent(), (req, res) => {
 	Student.findOneAndUpdate({
 		_id: req.params.id
@@ -59,6 +63,7 @@ route.put('/editStudent/:id', validateStudent(), (req, res) => {
 	})
 })
 
+/*-- route for getting all campanies from database --*/
 route.get('/companies',(req, res) => {
 	Company.find({}, function(err, companies) {
 		logger.info("companies list loaded");
@@ -66,6 +71,7 @@ route.get('/companies',(req, res) => {
   	});
 });
 
+/*-- route for getting a company with particular ID --*/
 route.get('/companies/:id',(req, res) => {
 	Company.find({_id: req.params.id}, function(err, company) {
 		logger.info(`A company with id:${req.params.id} is loaded`);
@@ -73,6 +79,7 @@ route.get('/companies/:id',(req, res) => {
   	});
 });
 
+/*-- route for registering a new company --*/
 route.post('/registerCompany', validateCompany() ,(req, res) => {
 	var company = new Company();
 
@@ -88,6 +95,7 @@ route.post('/registerCompany', validateCompany() ,(req, res) => {
     });
 });
 
+/*-- route for unregistering a company with particular ID --*/
 route.delete('/unregisterCompany/:id', (req, res) => {
 	Company.remove({_id: req.params.id},function(err) {
 		if(err) return err;
@@ -96,6 +104,7 @@ route.delete('/unregisterCompany/:id', (req, res) => {
 	});
 })
 
+/*-- route for registering a student for a company --*/
 route.put('/registerStudent/:id', ifAlreadyRegistered(), (req, res) => {
 	Company.findOneAndUpdate({
 		_id: req.body.companyId
@@ -112,6 +121,7 @@ route.put('/registerStudent/:id', ifAlreadyRegistered(), (req, res) => {
 	})
 })
 
+/*-- route for unregistering a student from a company --*/
 route.put('/unregisterStudent/:id', (req, res) => {
 	Company.findOneAndUpdate({
 		_id: req.body.companyId
