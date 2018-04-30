@@ -11,6 +11,7 @@ const logger = new winston.Logger({
 	]
 });
 
+module.exports = logger;
 // logger.level = 'debug';
 
 // logger.info("hello winston");
