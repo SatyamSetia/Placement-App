@@ -18,6 +18,18 @@ route.get('/students',(req, res) => {
   	});
 });
 
+/*-- route for getting a students with particular ID from database --*/
+route.get('/students/:id',(req, res) => {
+	Student.find({_id: req.params.id}, function(err, student) {
+		if(err) {
+			logger.error(err);
+			return err;
+		}
+		logger.info(`student with id: ${req.params.id} is loaded`);
+    	res.status(200).send(student);  
+  	});
+});
+
 /*-- route for adding a new student to database --*/
 route.post('/addStudent', validateStudent(), (req, res) => {
 	var student = new Student();
