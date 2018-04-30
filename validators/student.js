@@ -1,5 +1,5 @@
 const validator = require('validator');
-const logger = require('./logger');
+const logger = require('../logger');
 
 function validateStudent() {
 	return function(req,res,next) {
@@ -12,9 +12,9 @@ function validateStudent() {
 		} else if(!validator.isInt(req.body.rollNo,{min: 1})) {
 			logger.error('student cannot be created without roll no. or negative roll no.');
 			res.send('ERROR: roll no. cannot be empty or less than one');
-		} else if(!validator.isDecimal(req.body.cgpa,{min: 0})) {
-			logger.error('student cannot be created invalid cgpa');
-			res.send('ERROR: cgpa cannot be empty or negative');
+		} else if(!validator.isInt(req.body.cgpa,{min: 0})) {
+			logger.error('student cannot be created with invalid cgpa');
+			res.send('ERROR: cgpa cannot be empty or negative. It should be a non-negative integer.');
 		} else {
 			next();
 		}

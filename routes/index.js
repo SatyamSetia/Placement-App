@@ -2,7 +2,9 @@ const Student = require('../models/student.js');
 const Company = require('../models/company.js');
 const logger = require('../logger');
 const route = require('express').Router();
-const validateStudent = require('../validator');
+const validateStudent = require('../validators/student');
+const validateCompany = require('../validators/company');
+const ifAlreadyRegistered = require('../utils/index');
 
 route.get('/students',(req, res) => {
 	Student.find({}, function(err, students) {
@@ -71,7 +73,7 @@ route.get('/companies/:id',(req, res) => {
   	});
 });
 
-route.post('/registerCompany',(req, res) => {
+route.post('/registerCompany', validateCompany() ,(req, res) => {
 	var company = new Company();
 
     company.name = req.body.name;
@@ -86,7 +88,7 @@ route.post('/registerCompany',(req, res) => {
     });
 });
 
-route.delete('/unregisterCompany/:id',(req, res) => {
+route.delete('/unregisterCompany/:id', (req, res) => {
 	Company.remove({_id: req.params.id},function(err) {
 		if(err) return err;
 		logger.info(`A company with id:${req.params.id} is removed`);
@@ -94,7 +96,7 @@ route.delete('/unregisterCompany/:id',(req, res) => {
 	});
 })
 
-route.put('/registerStudent/:id', (req, res) => {
+route.put('/registerStudent/:id', ifAlreadyRegistered(), (req, res) => {
 	Company.findOneAndUpdate({
 		_id: req.body.companyId
 	}, {
@@ -103,21 +105,12 @@ route.put('/registerStudent/:id', (req, res) => {
 		}
 	}, {
 		new: true
-	}, async function(err, company) {
+	}, function(err, company) {
 		if(err) return err;
 		logger.info(`student with id: ${req.params.id} is registered for company with name: ${company.name}`)
 		res.send(company);
 	})
 })
-
-// function getStudentName(id) {
-// 	 var name = "";
-// 	 Student.findById(id, function(err, student) {
-// 	 	name = student.name;
-// 	 })
-
-// 	 return name;
-// }
 
 route.put('/unregisterStudent/:id', (req, res) => {
 	Company.findOneAndUpdate({
