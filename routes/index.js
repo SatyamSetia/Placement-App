@@ -2,6 +2,7 @@ const Student = require('../models/student.js');
 const Company = require('../models/company.js');
 const logger = require('../logger');
 const route = require('express').Router();
+const validateStudent = require('../validator');
 
 route.get('/students',(req, res) => {
 	Student.find({}, function(err, students) {
@@ -14,7 +15,7 @@ route.get('/students',(req, res) => {
   	});
 });
 
-route.post('/addStudent',(req, res) => {
+route.post('/addStudent', validateStudent(), (req, res) => {
 	var student = new Student();
 
     student.name = req.body.name;
@@ -37,7 +38,7 @@ route.delete('/removeStudent/:id',(req, res) => {
 	});
 })
 
-route.put('/editStudent/:id', (req, res) => {
+route.put('/editStudent/:id', validateStudent(), (req, res) => {
 	Student.findOneAndUpdate({
 		_id: req.params.id
 	}, {
