@@ -13,7 +13,7 @@ route.get('/students',(req, res) => {
 			return err;
 		}
 		logger.info("students list loaded");
-    	res.send(students);  
+    	res.status(200).send(students);  
   	});
 });
 
@@ -28,7 +28,7 @@ route.post('/addStudent', validateStudent(), (req, res) => {
     student.save(function(err, student){
         if(err) return err;
         logger.info(`A new student ${student.name} added to database`)
-        res.send(student); 
+        res.status(201).send(student); 
     });
 });
 
@@ -36,7 +36,7 @@ route.delete('/removeStudent/:id',(req, res) => {
 	Student.remove({_id: req.params.id},function(err) {
 		if(err) return err;
 		logger.info(`A student with id:${req.params.id} is removed from database`)
-		res.send();
+		res.status(204).send();
 	});
 })
 
@@ -55,14 +55,14 @@ route.put('/editStudent/:id', validateStudent(), (req, res) => {
 	}, function(err, student) {
 		if(err) return err;
 		logger.info(`A student with id:${req.params.id} is updated in database`)
-		res.send(student);
+		res.status(200).send(student);
 	})
 })
 
 route.get('/companies',(req, res) => {
 	Company.find({}, function(err, companies) {
 		logger.info("companies list loaded");
-    	res.send(companies);  
+    	res.status(200).send(companies);  
   	});
 });
 
@@ -84,7 +84,7 @@ route.post('/registerCompany', validateCompany() ,(req, res) => {
     company.save(function(err, company){
         if(err) return err;
         logger.info(`A new company named ${req.body.name} registered`);
-        res.send(company); 
+        res.status(201).send(company); 
     });
 });
 
@@ -92,7 +92,7 @@ route.delete('/unregisterCompany/:id', (req, res) => {
 	Company.remove({_id: req.params.id},function(err) {
 		if(err) return err;
 		logger.info(`A company with id:${req.params.id} is removed`);
-		res.send();
+		res.status(204).send();
 	});
 })
 
@@ -108,7 +108,7 @@ route.put('/registerStudent/:id', ifAlreadyRegistered(), (req, res) => {
 	}, function(err, company) {
 		if(err) return err;
 		logger.info(`student with id: ${req.params.id} is registered for company with name: ${company.name}`)
-		res.send(company);
+		res.status(200).send(company);
 	})
 })
 
@@ -124,7 +124,7 @@ route.put('/unregisterStudent/:id', (req, res) => {
 	}, function(err, company) {
 		if(err) return err;
 		logger.info(`student with id: ${req.params.id} is unregistered from company with name: ${company.name}`)
-		res.send(company);
+		res.status(200).send(company);
 	})
 })
 
