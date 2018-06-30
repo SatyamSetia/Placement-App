@@ -48,6 +48,22 @@ route.post('/addStudent', validateStudent(), (req, res) => {
 
 /*-- route for removing a student from database --*/
 route.delete('/removeStudent/:id',(req, res) => {
+	Company.find({},function(err,companies) {
+		companies.map(company => {
+			newArr = company.students.filter(stuId => stuId!==req.params.id)
+			Company.findOneAndUpdate({
+				_id: company._id
+			}, {
+				$set: {
+					students: newArr
+				}
+			}, {
+				new: true
+			}, function(err, company) {
+				if(err) return err;
+			})
+		})
+	})
 	Student.remove({_id: req.params.id},function(err) {
 		if(err) return err;
 		logger.info(`A student with id:${req.params.id} is removed from database`)
