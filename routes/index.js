@@ -91,6 +91,25 @@ route.get('/companies/:id',(req, res) => {
   	});
 });
 
+/*-- route for editing a company in database --*/
+route.put('/editCompany/:id', validateCompany(), (req, res) => {
+	Company.findOneAndUpdate({
+		_id: req.params.id
+	}, {
+		$set: {
+			name : req.body.name,
+	    	profile : req.body.profile,
+	    	openings : req.body.openings
+		}
+	}, {
+		new: true
+	}, function(err, company) {
+		if(err) return err;
+		logger.info(`A company with id:${req.params.id} is updated in database`)
+		res.status(200).send(company);
+	})
+})
+
 /*-- route for registering a new company --*/
 route.post('/registerCompany', validateCompany() ,(req, res) => {
 	var company = new Company();
